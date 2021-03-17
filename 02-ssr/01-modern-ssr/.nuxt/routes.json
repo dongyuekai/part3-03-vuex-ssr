@@ -1,0 +1,16 @@
+[
+  {
+    "name": "about",
+    "path": "/about",
+    "component": "/Users/dyk/Desktop/demos/LG/part3-03-vuex-ssr/02-ssr/01-modern-ssr/pages/about.vue",
+    "chunkName": "pages/about",
+    "_name": "_094453d7"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/Users/dyk/Desktop/demos/LG/part3-03-vuex-ssr/02-ssr/01-modern-ssr/pages/index.vue",
+    "chunkName": "pages/index",
+    "_name": "_28fc2e9c"
+  }
+]
