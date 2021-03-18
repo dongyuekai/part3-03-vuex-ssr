@@ -57,6 +57,9 @@
 
 <script>
 import { login, register } from "../api/user";
+// 仅在客户端 加载 js-cookie 包
+const Cookie = process.client ? require('js-cookie') : undefined
+
 export default {
   name: "loginPage",
   data() {
@@ -74,7 +77,6 @@ export default {
     },
   },
   methods: {
-    
     async onSubmit() {
       try {
         const { data } = this.isLogin
@@ -84,10 +86,17 @@ export default {
           : await register({
               user: this.user,
             });
-        console.log("data---", data);
+
+        // 保存用户的登录状态
+        this.$store.commit("setUser", data.user);
+
+        // 为了防止刷新页面数据丢失 我们需要把数据持久化到cookie
+        Cookie.set("user", data.user);
+
         this.$router.push("/");
+
       } catch (error) {
-        console.log("error---");
+        console.log("error---",error);
       }
     },
   },
