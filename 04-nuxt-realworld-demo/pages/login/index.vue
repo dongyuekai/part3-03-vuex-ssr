@@ -16,27 +16,33 @@
             <li>That email is already taken</li>
           </ul>
 
-          <form>
+          <form @submit.prevent="onSubmit">
             <fieldset class="form-group">
               <input
+                v-model="user.username"
                 v-if="!isLogin"
                 class="form-control form-control-lg"
                 type="text"
                 placeholder="Your Name"
+                required
               />
             </fieldset>
             <fieldset class="form-group">
               <input
+                v-model="user.email"
                 class="form-control form-control-lg"
-                type="text"
+                type="email"
                 placeholder="Email"
+                required
               />
             </fieldset>
             <fieldset class="form-group">
               <input
+                v-model="user.password"
                 class="form-control form-control-lg"
                 type="password"
                 placeholder="Password"
+                required
               />
             </fieldset>
             <button class="btn btn-lg btn-primary pull-xs-right">
@@ -50,15 +56,42 @@
 </template>
 
 <script>
+import { login, register } from "../api/user";
 export default {
   name: "loginPage",
+  data() {
+    return {
+      user: {
+        username: "dyk",
+        email: "dyk@163.com",
+        password: "12345678",
+      },
+    };
+  },
   computed: {
     isLogin() {
       return this.$route.name === "login";
     },
   },
+  methods: {
+    async onSubmit() {
+      try {
+        const { data } = this.isLogin
+          ? await login({
+              user: this.user,
+            })
+          : await register({
+              user: this.user,
+            });
+        console.log("data---", data);
+        this.$router.push("/");
+      } catch (error) {
+        alert("error---");
+      }
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped>
+<style>
 </style>
