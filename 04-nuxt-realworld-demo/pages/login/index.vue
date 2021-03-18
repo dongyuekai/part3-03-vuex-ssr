@@ -58,9 +58,10 @@
 <script>
 import { login, register } from "../api/user";
 // 仅在客户端 加载 js-cookie 包
-const Cookie = process.client ? require('js-cookie') : undefined
+const Cookie = process.client ? require("js-cookie") : undefined;
 
 export default {
+  middleware: "notAuthenticated",
   name: "loginPage",
   data() {
     return {
@@ -94,9 +95,8 @@ export default {
         Cookie.set("user", data.user);
 
         this.$router.push("/");
-
       } catch (error) {
-        console.log("error---",error);
+        console.log("error---", error);
       }
     },
   },
