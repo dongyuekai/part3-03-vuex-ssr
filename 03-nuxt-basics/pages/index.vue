@@ -14,7 +14,7 @@
 <script>
 export default {
   name: "HomePage",
-  layout: 'foo', // 指定公共布局组件为layouts/foo.vue 默认是 layouts/default.vue
+  layout: 'foo', // 指定当前组价布局组件为layouts/foo.vue 默认是 layouts/default.vue 
   methods: {
     goToAbout() {
       this.$router.push("/about");
