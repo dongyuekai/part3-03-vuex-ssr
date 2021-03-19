@@ -104,6 +104,19 @@ export default {
       article,
     };
   },
+  head() {
+    // 设置页面meta优化SEO
+    return {
+      title: `${this.article.title} - RealWorld`,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: this.article.description,
+        },
+      ],
+    };
+  },
 };
 </script>
 
