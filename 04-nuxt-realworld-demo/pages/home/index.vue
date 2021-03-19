@@ -107,14 +107,13 @@
             <p>Popular Tags</p>
 
             <div class="tag-list">
-              <a href="" class="tag-pill tag-default">programming</a>
-              <a href="" class="tag-pill tag-default">javascript</a>
-              <a href="" class="tag-pill tag-default">emberjs</a>
-              <a href="" class="tag-pill tag-default">angularjs</a>
-              <a href="" class="tag-pill tag-default">react</a>
-              <a href="" class="tag-pill tag-default">mean</a>
-              <a href="" class="tag-pill tag-default">node</a>
-              <a href="" class="tag-pill tag-default">rails</a>
+              <a
+                href=""
+                class="tag-pill tag-default"
+                v-for="item in tags"
+                :key="item"
+                >{{ item }}</a
+              >
             </div>
           </div>
         </div>
@@ -125,22 +124,32 @@
 
 <script>
 import { getArticles } from "../api/article";
+import { getTags } from "../api/tag";
 export default {
   name: "homePage",
-  watchQuery: ["page"],  // 监听查询参数改变的时候 触发asyncData 
+  watchQuery: ["page"], // 监听查询参数改变的时候 触发asyncData
   async asyncData({ query }) {
     console.log("query---", query);
     const page = Number.parseInt(query.page || 1);
     const limit = 5;
-    const { data } = await getArticles({
-      limit,
-      offset: (page - 1) * limit,
-    });
+
+    const [articleRes, tagRes] = await Promise.all([
+      getArticles({
+        limit,
+        offset: (page - 1) * limit,
+      }),
+      getTags(),
+    ]);
+
+    const { articles, articlesCount } = articleRes.data;
+    const { tags } = tagRes.data;
+
     return {
-      articles: data.articles,
-      articlesCount: data.articlesCount,
-      limit,
-      page,
+      articles, // 文章列表
+      articlesCount, // 文章总数
+      tags, // 标签列表
+      limit, // 每页大小
+      page, // 页码
     };
   },
   computed: {
