@@ -86,7 +86,9 @@
                 >
                   {{ article.author.username }}</nuxt-link
                 >
-                <span class="date">{{ article.createdAt }}</span>
+                <span class="date">{{
+                  article.createdAt | dateFilter("MMM DD, YYYY")
+                }}</span>
               </div>
               <button
                 class="btn btn-outline-primary btn-sm pull-xs-right"
@@ -178,7 +180,7 @@ import { getTags } from "../api/tag";
 export default {
   name: "homePage",
   watchQuery: ["page", "tag", "tab"], // 监听查询参数改变的时候 触发asyncData
-  async asyncData({ query}) {
+  async asyncData({ query }) {
     const page = Number.parseInt(query.page || 1);
     const tag = query.tag;
     const tab = query.tab || "global_feed";
