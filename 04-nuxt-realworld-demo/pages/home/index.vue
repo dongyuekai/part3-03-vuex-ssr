@@ -95,6 +95,8 @@
                 :class="{
                   active: article.favorited,
                 }"
+                @click="onFavorite(article)"
+                :disabled="article.favoriteDisabled"
               >
                 <i class="ion-heart"></i> {{ article.favoritesCount }}
               </button>
@@ -173,8 +175,8 @@ import { mapState } from "vuex";
 import {
   getArticles,
   getYourFeedArticles,
-  // addFavorite,
-  // deleteFavorite,
+  addFavorite,
+  deleteFavorite,
 } from "../api/article";
 import { getTags } from "../api/tag";
 export default {
@@ -201,6 +203,9 @@ export default {
     const { articles, articlesCount } = articleRes.data;
     const { tags } = tagRes.data;
 
+    // 默认给每一个文章禁用点赞
+    articles.forEach((article) => (article.favoriteDisabled = false));
+
     return {
       articles, // 文章列表
       articlesCount, // 文章总数
@@ -215,6 +220,24 @@ export default {
     ...mapState(["user"]),
     totalPage() {
       return Math.ceil(this.articlesCount / this.limit);
+    },
+  },
+  methods: {
+    async onFavorite(article) {
+      article.favoriteDisabled = true;
+      if (article.favorited) {
+        // 取消点赞
+        await deleteFavorite(article.slug);
+        article.favorited = false;
+        article.favoritesCount += -1;
+      } else {
+        // 添加点赞
+        await addFavorite(article.slug);
+        article.favorited = true;
+        article.favoritesCount += 1;
+      }
+      // 点击后 禁用按钮 防止多次点击
+      article.favoriteDisabled = false;
     },
   },
 };
